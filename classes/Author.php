@@ -118,20 +118,18 @@ class Author {
 	 * @throws \TypeError if the author avatar url is not a string
 	 **/
 	public function setAuthorAvatarUrl(?string $newAuthorAvatarUrl): void {
-		if($newAuthorAvatarUrl === null) {
-			$this->authorAvatarUrl = $newAuthorAvatarUrl;
-			return;
+		// verify the email is secure
+		$newAuthorAvatarUrl = trim($newAuthorAvatarUrl);
+		$newAuthorAvatarUrl = filter_var($newAuthorAvatarUrl, FILTER_SANITIZE_URL, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newAuthorAvatarUrl) === true) {
+			throw(new \InvalidArgumentException("profile email is empty or insecure"));
 		}
-		$newAuthorAvatarUrl = strtolower(trim($newAuthorAvatarUrl));
-		if(ctype_xdigit($newAuthorAvatarUrl) === false) {
-			throw(new\TypeError("user url is not valid"));
+		// verify the email will fit in the database
+		if(strlen($newAuthorAvatarUrl) > 128) {
+			throw(new \RangeException("profile email is too large"));
 		}
-		//make sure author avatar url is less than 255 characters
-		if(strlen($newAuthorAvatarUrl) >255) {
-			throw(new\RangeException("user url has to be less than 255"));
-		}
-		// convert and store the avatar url
-		$this->authorAvatarUrl = $newAuthorAvatarUrl;
+		// store the email
+		$this->$newAuthorAvatarUrl = $newAuthorAvatarUrl;
 	}
 	/**
 	 *Accessor method for authorActivationToken
@@ -180,20 +178,23 @@ class Author {
 	 * @throws \TypeError if the author email is not a string
 	 **/
 	public function setAuthorEmail(?string $newAuthorEmail): void {
-		if($newAuthorEmail === null) {
-			$this->$newAuthorEmail = null;
-			return;
-		}
+		$newAuthorEmail = trim($newAuthorEmail);
+			$this->newAuthorEmail = filter_var($newAuthorEmail): void {
+			$newAuthorEmail = filter_var($newAuthorEmail, FILTER_SANTIZE_EMAIL, FILTER_FLAD_NO_ENCODE_QUOTES);
+			if(empty($newAuthorEmail) ===true) {
+				throw(new \InvalidArgumentException(("Email is empty or malicios"));
+			}
+			}
 		$newAuthorEmail = strtolower(trim($newAuthorEmail));
 		if(ctype_xdigit($newAuthorEmail) === false) {
-			throw(new\TypeError("user email is not valid"));
+			throw(new\TypeError("user activation is not valid"));
 		}
-		//make sure author email is less than 128 characters
-		if(strlen($newAuthorEmail) >128) {
-			throw(new\RangeException("user email has to be less than 128"));
+		//make sure author avatar url is less than 32 characters
+		if(strlen($newAuthorActivationToken) >32) {
+			throw(new\RangeException("Email is empty or malicious"));
 		}
-		// convert and store the new email.
-		$this->authorEmail = $newAuthorEmail;
+		// convert and store the activation token
+		$this->newAuthorEmail = $newAuthorEmail;
 	}
 	/**
 	 *Accessor method for authorHash
