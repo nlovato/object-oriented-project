@@ -244,19 +244,17 @@ class Author {
 	 * @throws \TypeError if the author username is not a string
 	 **/
 	public function setAuthorUsername(?string $newAuthorUsername): void {
-		if($newAuthorUsername === null) {
-			$this->$newAuthorUsername = null;
-			return;
+		// verify the at handle is secure
+		$newAuthorUsername = trim($newAuthorUsername);
+		$newAuthorUsername = filter_var($newAuthorUsername, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newAuthorUsername) === true) {
+			throw(new \InvalidArgumentException("Author username is empty or malicious."));
 		}
-		$newAuthorUsername = strtolower(trim($newAuthorUsername));
-		if(ctype_xdigit($newAuthorUsername) === false) {
-			throw(new\TypeError("username is not valid"));
-		}
-		//make sure author hash is less than 97 characters
+		// verify the username will fit in the database
 		if(strlen($newAuthorUsername) > 32) {
-			throw(new\RangeException("username has to be less than 32"));
+			throw(new \RangeException("Username is too large"));
 		}
-		// convert and store the new username.
+		// store the username
 		$this->authorUsername = $newAuthorUsername;
 	}
 	/**
