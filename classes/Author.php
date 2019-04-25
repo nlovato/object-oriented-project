@@ -99,6 +99,7 @@ class Author {
 			$exceptionType = get_class($exception);
 			throw(new $exceptionType($exception->getMessage(), 0, $exception));
 		}
+
 		// convert and store the author id
 		$this->authorId = $uuid;
 	}
@@ -124,10 +125,12 @@ class Author {
 		if(empty($newAuthorAvatarUrl) === true) {
 			throw(new \InvalidArgumentException("profile email is empty or insecure"));
 		}
+		
 		// verify the email will fit in the database
 		if(strlen($newAuthorAvatarUrl) > 128) {
 			throw(new \RangeException("profile email is too large"));
 		}
+
 		// store the email
 		$this->$newAuthorAvatarUrl = $newAuthorAvatarUrl;
 	}
@@ -155,10 +158,12 @@ class Author {
 		if(ctype_xdigit($newAuthorActivationToken) === false) {
 			throw(new\TypeError("user activation is not valid"));
 		}
+
 		//make sure author avatar url is less than 32 characters
 		if(strlen($newAuthorActivationToken) >32) {
 			throw(new\RangeException("user activation token has to be less than 32"));
 		}
+
 		// convert and store the activation token
 		$this->authorActivationToken = $newAuthorActivationToken;
 	}
@@ -225,6 +230,7 @@ class Author {
 		if(strlen($newAuthorHash) !== 97) {
 			throw(new\RangeException("Author hash must be 97 characters"));
 		}
+
 		// convert and store the new hash.
 		$this->authorHash = $newAuthorHash;
 	}
@@ -250,10 +256,12 @@ class Author {
 		if(empty($newAuthorUsername) === true) {
 			throw(new \InvalidArgumentException("Author username is empty or malicious."));
 		}
+
 		// verify the username will fit in the database
 		if(strlen($newAuthorUsername) > 32) {
 			throw(new \RangeException("Username is too large"));
 		}
+
 		// store the username
 		$this->authorUsername = $newAuthorUsername;
 	}
@@ -269,6 +277,7 @@ class Author {
 		$query = "INSERT INTO author(authorId, authorAvatarUrl, authorActivationToken, authorEmail, authorHash, authorUsername) 
 VALUES(:authorId, :authorAvatarUrl, :authorActivationToken, :authorEmail, :authorHash, :authorUsername)";
 		$statement = $pdo->prepare($query);
+
 		// bind the member variables to the place holders in the template
 		$parameters = ["authorId" => $this->authorId->getBytes(), "authorAvatarUrl" => $this->authorAvatarUrl,
 			"authorActivationToken" => $this->authorActivationToken, "authorEmail" => $this->authorEmail,
@@ -283,9 +292,11 @@ VALUES(:authorId, :authorAvatarUrl, :authorActivationToken, :authorEmail, :autho
 	 * @throws \TypeError if $pdo is not a PDO connection object
 	 **/
 	public function delete(\PDO $pdo) : void {
+
 		// create query template
 		$query = "DELETE FROM author WHERE authorId = :authorId";
 		$statement = $pdo->prepare($query);
+
 		// bind the member variables to the place holder in the template
 		$parameters = ["authorId" => $this->authorId->getBytes()];
 		$statement->execute($parameters);
@@ -298,10 +309,12 @@ VALUES(:authorId, :authorAvatarUrl, :authorActivationToken, :authorEmail, :autho
 	 * @throws \TypeError if $pdo is not a PDO connection object
 	 **/
 	public function update(\PDO $pdo) : void {
+
 		// create query template
 		$query = "UPDATE author SET authorEmail = :authorEmail, authorUsername = :authorUsername, 
 	authorAvatarUrl = :authorAvatarUrl, authorActivationToken = :authorActivationToken, authorHash = :authorHash  WHERE authorId = :authorId";
 		$statement = $pdo->prepare($query);
+
 		$parameters = ["authorId" => $this->authorId->getBytes(), "authorAvatarUrl" => $this->authorAvatarUrl,
 			"authorActivationToken" => $this->authorActivationToken, "authorEmail" => $this->authorEmail,
 			"authorHash" => $this->authorHash, "authorUsername" => $this->authorUsername];
