@@ -10,8 +10,8 @@ require_once(dirname(__DIR__,2) . "/classes/autoload.php");
 
 use nmarshlovato\ObjectOrientedProject\Author;
 
-	$authorId = new Author("f805a6fb-83c8-4690-bcb2-19b170cfc8f8\", 
-	"pikachu", "0abf9d115769410ab1d55e0acec5f8b0", "pikachu@gmail.com", 
+	$authorId = new Author("f805a6fb-83c8-4690-bcb2-19b170cfc8f8",
+	"avatar", "0abf9d115769410ab1d55e0acec5f8b0", "new@email.com",
 	'$argon2i$v=19$m=1024,t=384,p=2$T1B6Ymdqa3FJdmZqaDdqYg$hhyC1jf2WjbgfD8Jp6GZE9Tg3IpsYpXKm2VWYOJq8LA',
 	"newAuthorUsername");
 	var_dump($authorId);
