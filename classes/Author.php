@@ -178,23 +178,22 @@ class Author {
 	 * @throws \TypeError if the author email is not a string
 	 **/
 	public function setAuthorEmail(?string $newAuthorEmail): void {
-		$newAuthorEmail = trim($newAuthorEmail);
-			$this->newAuthorEmail = filter_var($newAuthorEmail): void {
+		//verify the email content is secure
+			$newAuthorEmail = trim($newAuthorEmail);
 			$newAuthorEmail = filter_var($newAuthorEmail, FILTER_SANTIZE_EMAIL, FILTER_FLAD_NO_ENCODE_QUOTES);
-			if(empty($newAuthorEmail) ===true) {
-				throw(new \InvalidArgumentException(("Email is empty or malicios"));
+			if(empty($newAuthorEmail) === true) {
+				throw(new \InvalidArgumentException("Email is empty or malicious."));
 			}
+			/**
+			 * Verify the email content will fit in the database
+			 **/
+			if(strlen($newAuthorEmail) > 128) {
+				throw(new \RangerException("Email content too large."));
 			}
-		$newAuthorEmail = strtolower(trim($newAuthorEmail));
-		if(ctype_xdigit($newAuthorEmail) === false) {
-			throw(new\TypeError("user activation is not valid"));
-		}
-		//make sure author avatar url is less than 32 characters
-		if(strlen($newAuthorActivationToken) >32) {
-			throw(new\RangeException("Email is empty or malicious"));
-		}
-		// convert and store the activation token
-		$this->newAuthorEmail = $newAuthorEmail;
+			/**
+			 * store the email content
+			 **/
+			$this->$newAuthorEmail = $newAuthorEmail;
 	}
 	/**
 	 *Accessor method for authorHash
@@ -212,17 +211,19 @@ class Author {
 	 * @throws \TypeError if the author hash is not a string
 	 **/
 	public function setAuthorHash(?string $newAuthorHash): void {
-		if($newAuthorHash === null) {
-			$this->$newAuthorHash = null;
-			return;
+		//enforce the hash is formatted properly
+		$newAuthorHash = trim($newAuthorHash);
+		if(empty($newAuthorHash) === true) {
+			throw(new \InvalidArgumentException("Author hash empty or malicious."));
 		}
-		$newAuthorHash = strtolower(trim($newAuthorHash));
-		if(ctype_xdigit($newAuthorHash) === false) {
-			throw(new\TypeError("user hash is not valid"));
+		//enforce the hash is an Argon hash
+		$profileHashInfo = password_get_info($newAuthorHash);
+		if($profileHashInfo ["algoName"] !== "argon21") {
+			throw(new \InvalidArgumentException("Author hash is not valid"));
 		}
-		//make sure author hash is less than 97 characters
-		if(strlen($newAuthorHash) >97) {
-			throw(new\RangeException("user hash has to be less than 97"));
+		//enforce that the hash is exactly 97 characters
+		if(strlen($newAuthorHash) !== 97) {
+			throw(new\RangeException("Author hash must be 97 characters"));
 		}
 		// convert and store the new hash.
 		$this->authorHash = $newAuthorHash;
