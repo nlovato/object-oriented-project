@@ -2,7 +2,7 @@
 
 namespace nmarshlovato\ObjectOrientedProject;
 
-require_once(dirname(__DIR__,2) . "/vendor/autoload.php");
+require_once(dirname(__DIR__,2) . "/classes/autoload.php");
 
 use Ramsey\Uuid\Uuid;
 /**
@@ -125,7 +125,7 @@ class Author {
 		if(empty($newAuthorAvatarUrl) === true) {
 			throw(new \InvalidArgumentException("profile email is empty or insecure"));
 		}
-		
+
 		// verify the email will fit in the database
 		if(strlen($newAuthorAvatarUrl) > 128) {
 			throw(new \RangeException("profile email is too large"));
