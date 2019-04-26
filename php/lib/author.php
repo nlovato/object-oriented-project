@@ -1,12 +1,12 @@
 <?php
 
 /*
- * setup require_once, namespaces (make sure to include both autoloaders
+ * setup require_once, namespaces (make sure to include both autoloaders)
  * use the new keyword to call the constructor in the class and add all required parameters
  * vardump() the result from the step above
  */
 require_once (dirname(__DIR__) . "/vendor/autoload.php");
-require_once(dirname(__DIR__, 2) . "/classes/autoload.php");
+require_once(dirname(__DIR__) . "/classes/autoload.php");
 
 use nmarshlovato\ObjectOrientedProject\Author;
 
