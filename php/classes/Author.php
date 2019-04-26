@@ -1,6 +1,5 @@
 <?php
 
-namespace nmarshlovato\ObjectOrientedProject;
 
 require_once(dirname(__DIR__) . "/classes/autoload.php");
 
@@ -18,7 +17,7 @@ class Author {
 	use ValidateUuid;
 	use ValidateDate;
 	/**
-	 * id and P.K. for author
+	 * id and Author (primary key)
 	 * @var string Uuid $authorId
 	 */
 	private $authorId;
