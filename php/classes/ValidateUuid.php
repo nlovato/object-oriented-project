@@ -1,6 +1,6 @@
 <?php
 
-namespace Edu\Cnm\DataDesign;
+namespace nmarshlovato\ObjectOrientedProject;
 
 require_once(dirname(__DIR__) . "/vendor/autoload.php");
 

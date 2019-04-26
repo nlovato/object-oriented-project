@@ -1,6 +1,6 @@
 <?php
 
-
+namespace nmarshlovato\ObjectOrientedProject;
 require_once(dirname(__DIR__) . "/classes/autoload.php");
 
 use Ramsey\Uuid\Uuid;
