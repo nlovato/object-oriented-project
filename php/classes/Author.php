@@ -414,3 +414,14 @@ public static function getAuthorByAuthorId(\PDO $pdo, $authorId) : ?Author {
 		if(empty($authorUsername) === true) {
 			throw(new \PDOException("author username is invalid"));
 		}
+		// escape any mySQL wild cards
+		$authorUsername = str_replace("_", "\\_", str_replace("%", "\\%", $authorUsername));
+
+		// create query template
+		$query = "SELECT authorId, authorAvatarUrl, authorActivationToken, authorEmail, authorHash, authorUsername FROM author WHERE authorUsername = :authorUsername";
+		$statement = $pdo->prepare($query);
+
+		// bind the tweet content to the place holder in the template
+		$authorUsername = "%$authorUsername%";
+		$parameters = ["tweetContent" => $authorUsername];
+		$statement->execute($parameters);
