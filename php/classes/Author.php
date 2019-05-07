@@ -70,20 +70,20 @@ class Author {
 			$this->setAuthorEmail($newAuthorEmail);
 			$this->setAuthorHash($newAuthorHash);
 			$this->setAuthorUsername($newAuthorUsername);
-		} //determine what exception type was thrown
+		}
+			//determine what exception type was thrown
 		catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
 			$exceptionType = get_class($exception);
 			throw(new $exceptionType($exception->getMessage(), 0, $exception));
 		}
 	}
-		/**
-		 *Accessor method for authorId
-		 * @return string|Uuid for authorId (or null if new Profile)
-		 */
-		public
-		function getAuthorAvatarURL(): ?string {
-			return ($this->authorAvatarUrl);
-		}
+	/**
+	 *Accessor method for authorId
+	 * @return string|Uuid for authorId (or null if new Profile)
+	 */
+	public function getAuthorId():Uuid {
+		return($this->authorId);
+	}
 	/**
 	 * mutator method for author id
 	 *
@@ -184,7 +184,7 @@ class Author {
 	public function setAuthorEmail(?string $newAuthorEmail): void {
 		//verify the email content is secure
 			$newAuthorEmail = trim($newAuthorEmail);
-			$newAuthorEmail = filter_var($newAuthorEmail, FILTER_SANTIZE_EMAIL, FILTER_FLAD_NO_ENCODE_QUOTES);
+			$newAuthorEmail = filter_var($newAuthorEmail, FILTER_SANITIZE_EMAIL, FILTER_FLAG_NO_ENCODE_QUOTES);
 			if(empty($newAuthorEmail) === true) {
 				throw(new \InvalidArgumentException("Email is empty or malicious."));
 			}
@@ -192,7 +192,7 @@ class Author {
 			 * Verify the email content will fit in the database
 			 **/
 			if(strlen($newAuthorEmail) > 128) {
-				throw(new \RangerException("Email content too large."));
+				throw(new \RangeException("Email content too large."));
 			}
 			/**
 			 * store the email content
@@ -222,7 +222,7 @@ class Author {
 		}
 		//enforce the hash is an Argon hash
 		$profileHashInfo = password_get_info($newAuthorHash);
-		if($profileHashInfo ["algoName"] !== "argon21") {
+		if($profileHashInfo ["algoName"] !== "argon2i") {
 			throw(new \InvalidArgumentException("Author hash is not valid"));
 		}
 		//enforce that the hash is exactly 97 characters
@@ -318,4 +318,6 @@ VALUES(:authorId, :authorAvatarUrl, :authorActivationToken, :authorEmail, :autho
 			"authorActivationToken" => $this->authorActivationToken, "authorEmail" => $this->authorEmail,
 			"authorHash" => $this->authorHash, "authorUsername" => $this->authorUsername];
 		$statement->execute($parameters);
-	}}
+	}
+
+}
