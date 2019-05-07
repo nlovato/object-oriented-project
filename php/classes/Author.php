@@ -377,5 +377,40 @@ public static function getAuthorByAuthorId(\PDO $pdo, $authorId) : ?Author {
 			throw(new \PDOException("author username is invalid"));
 		}
 
-		// escape any mySQL wild cards
-		$authorUsername = str_replace("_", "\\_", str_replace("%", "\\%", $authorUsername));
+// create query template
+		$query = "SELECT authorId, authorAvatarUrl, authorActivationToken, authorEmail, authorHash, authorUsername FROM author WHERE authorUsername = :authorUsername";
+		$statement = $pdo->prepare($query);
+		// bind the tweet profile id to the place holder in the template
+		$parameters = ["authorUsername" => $authorUsername->getBytes()];
+		$statement->execute($parameters);
+		// build an array of tweets
+		$authorUsername = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$authorUsername = new Author($row["authorId"], $row["authorAvatarUrl"], $row["authorActivationToken"], $row["authorEmail"], $row["authorHash"], row[$authorUsername]);
+				$authorUsername[$authorUsername->key()] = $authorUsername;
+				$authorUsername->next();
+			} catch(\Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+	}
+
+	/**
+	 * gets the author by authorUsername
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @param string $authorUsername author content to search for
+	 * @return \SplFixedArray SplFixedArray of authors found
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when variables are not the correct data type
+	 **/
+	public static function getauthorbyauthorUsername(\PDO $pdo, string $authorUsername) : \SplFixedArray {
+		// sanitize the description before searching
+		$authorUsername = trim($authorUsername);
+		$authorUsername = filter_var($authorUsername, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($authorUsername) === true) {
+			throw(new \PDOException("author username is invalid"));
+		}
