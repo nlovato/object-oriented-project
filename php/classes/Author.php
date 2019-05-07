@@ -46,6 +46,7 @@ class Author {
 	 * @var $authorUsername
 	 */
 	private $authorUsername;
+
 	/**
 	 * constructor for this Author
 	 *
@@ -70,24 +71,25 @@ class Author {
 			$this->setAuthorEmail($newAuthorEmail);
 			$this->setAuthorHash($newAuthorHash);
 			$this->setAuthorUsername($newAuthorUsername);
-		}
-			//determine what exception type was thrown
+		} //determine what exception type was thrown
 		catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
 			$exceptionType = get_class($exception);
 			throw(new $exceptionType($exception->getMessage(), 0, $exception));
 		}
 	}
+
 	/**
 	 *Accessor method for authorId
 	 * @return string|Uuid for authorId (or null if new Profile)
 	 */
-	public function getAuthorId():Uuid {
-		return($this->authorId);
+	public function getAuthorId(): Uuid {
+		return ($this->authorId);
 	}
+
 	/**
 	 * mutator method for author id
 	 *
-	 * @param  string $newAuthorId value of new author id
+	 * @param string $newAuthorId value of new author id
 	 * @throws \RangeException if $newAuthorId is not positive
 	 * @throws \TypeError if the author Id is not positive
 	 **/
@@ -102,17 +104,19 @@ class Author {
 		// convert and store the author id
 		$this->authorId = $uuid;
 	}
+
 	/**
 	 *Accessor method for authorAvatarUrl
-	 *@return string for avatarUrl
+	 * @return string for avatarUrl
 	 */
 	public function getAuthorAvatarUrl(): ?string {
 		return ($this->authorAvatarUrl);
 	}
+
 	/**
 	 * mutator method for author avatar url
 	 *
-	 * @param  string $newAuthorAvatarUrl value of new author url
+	 * @param string $newAuthorAvatarUrl value of new author url
 	 * @throws \InvalidArgumentException if $newAuthorAvatarUrl is not a valid url or insecure
 	 * @throws \RangeException if $newAuthorAvatarUrl is over charset
 	 * @throws \TypeError if the author avatar url is not a string
@@ -133,17 +137,19 @@ class Author {
 		// store the email
 		$this->$newAuthorAvatarUrl = $newAuthorAvatarUrl;
 	}
+
 	/**
 	 *Accessor method for authorActivationToken
-	 *@return string for authorActivationToken
+	 * @return string for authorActivationToken
 	 */
 	public function getAuthorActivationToken(): ?string {
 		return ($this->authorActivationToken);
 	}
+
 	/**
 	 * mutator method for author activation token
 	 *
-	 * @param  string $newAuthorActivationToken value of new author activation token
+	 * @param string $newAuthorActivationToken value of new author activation token
 	 * @throws \InvalidArgumentException if $newAuthorActivationToken is not a valid url or insecure
 	 * @throws \RangeException if $newAuthorActivationToken is over charset
 	 * @throws \TypeError if the author avatar activation is not a string
@@ -159,57 +165,61 @@ class Author {
 		}
 
 		//make sure author avatar url is less than 32 characters
-		if(strlen($newAuthorActivationToken) >32) {
+		if(strlen($newAuthorActivationToken) > 32) {
 			throw(new\RangeException("user activation token has to be less than 32"));
 		}
 
 		// convert and store the activation token
 		$this->authorActivationToken = $newAuthorActivationToken;
 	}
+
 	/**
 	 *Accessor method for authorEmail
-	 *@return string for authorEmail
+	 * @return string for authorEmail
 	 */
 	public function getAuthorEmail(): ?string {
 		return ($this->authorEmail);
 	}
+
 	/**
 	 * mutator method for author email
 	 *
-	 * @param  string $newAuthorEmail value of new author email
+	 * @param string $newAuthorEmail value of new author email
 	 * @throws \InvalidArgumentException if $newAuthorEmail is not a valid email or insecure
 	 * @throws \RangeException if $newAuthorEmail is over charset
 	 * @throws \TypeError if the author email is not a string
 	 **/
 	public function setAuthorEmail(?string $newAuthorEmail): void {
 		//verify the email content is secure
-			$newAuthorEmail = trim($newAuthorEmail);
-			$newAuthorEmail = filter_var($newAuthorEmail, FILTER_SANITIZE_EMAIL, FILTER_FLAG_NO_ENCODE_QUOTES);
-			if(empty($newAuthorEmail) === true) {
-				throw(new \InvalidArgumentException("Email is empty or malicious."));
-			}
-			/**
-			 * Verify the email content will fit in the database
-			 **/
-			if(strlen($newAuthorEmail) > 128) {
-				throw(new \RangeException("Email content too large."));
-			}
-			/**
-			 * store the email content
-			 **/
-			$this->$newAuthorEmail = $newAuthorEmail;
+		$newAuthorEmail = trim($newAuthorEmail);
+		$newAuthorEmail = filter_var($newAuthorEmail, FILTER_SANITIZE_EMAIL, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newAuthorEmail) === true) {
+			throw(new \InvalidArgumentException("Email is empty or malicious."));
+		}
+		/**
+		 * Verify the email content will fit in the database
+		 **/
+		if(strlen($newAuthorEmail) > 128) {
+			throw(new \RangeException("Email content too large."));
+		}
+		/**
+		 * store the email content
+		 **/
+		$this->$newAuthorEmail = $newAuthorEmail;
 	}
+
 	/**
 	 *Accessor method for authorHash
-	 *@return string for authorHash
+	 * @return string for authorHash
 	 */
 	public function getAuthorHash(): ?string {
 		return ($this->authorHash);
 	}
+
 	/**
 	 * mutator method for author hash
 	 *
-	 * @param  string $newAuthorHash value of new author email
+	 * @param string $newAuthorHash value of new author email
 	 * @throws \InvalidArgumentException if $newAuthorHash is not a valid hash key or insecure
 	 * @throws \RangeException if $newAuthorHash is over charset
 	 * @throws \TypeError if the author hash is not a string
@@ -233,17 +243,19 @@ class Author {
 		// convert and store the new hash.
 		$this->authorHash = $newAuthorHash;
 	}
+
 	/**
 	 *Accessor method for authorUsername
-	 *@return string for authorUsername
+	 * @return string for authorUsername
 	 */
 	public function getAuthorUsername(): ?string {
 		return ($this->authorUsername);
 	}
+
 	/**
 	 * mutator method for author username
 	 *
-	 * @param  string $newAuthorUsername value of new author username
+	 * @param string $newAuthorUsername value of new author username
 	 * @throws \InvalidArgumentException if $newAuthorUsername is not a valid hash key or insecure
 	 * @throws \RangeException if $newAuthorUsername is over charset
 	 * @throws \TypeError if the author username is not a string
@@ -264,6 +276,7 @@ class Author {
 		// store the username
 		$this->authorUsername = $newAuthorUsername;
 	}
+
 	/**
 	 * inserts into authors mySQL
 	 *
@@ -271,7 +284,7 @@ class Author {
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throws \TypeError if $pdo is not a PDO connection object
 	 **/
-	public function insert(\PDO $pdo) : void {
+	public function insert(\PDO $pdo): void {
 		// create query template
 		$query = "INSERT INTO author(authorId, authorAvatarUrl, authorActivationToken, authorEmail, authorHash, authorUsername) 
 VALUES(:authorId, :authorAvatarUrl, :authorActivationToken, :authorEmail, :authorHash, :authorUsername)";
@@ -283,6 +296,7 @@ VALUES(:authorId, :authorAvatarUrl, :authorActivationToken, :authorEmail, :autho
 			"authorHash" => $this->authorHash, "authorUsername" => $this->authorUsername];
 		$statement->execute($parameters);
 	}
+
 	/**
 	 * deletes this Author from mySQL
 	 *
@@ -290,7 +304,7 @@ VALUES(:authorId, :authorAvatarUrl, :authorActivationToken, :authorEmail, :autho
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throws \TypeError if $pdo is not a PDO connection object
 	 **/
-	public function delete(\PDO $pdo) : void {
+	public function delete(\PDO $pdo): void {
 
 		// create query template
 		$query = "DELETE FROM author WHERE authorId = :authorId";
@@ -300,6 +314,7 @@ VALUES(:authorId, :authorAvatarUrl, :authorActivationToken, :authorEmail, :autho
 		$parameters = ["authorId" => $this->authorId->getBytes()];
 		$statement->execute($parameters);
 	}
+
 	/**
 	 * updates this Author in mySQL
 	 *
@@ -307,7 +322,7 @@ VALUES(:authorId, :authorAvatarUrl, :authorActivationToken, :authorEmail, :autho
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throws \TypeError if $pdo is not a PDO connection object
 	 **/
-	public function update(\PDO $pdo) : void {
+	public function update(\PDO $pdo): void {
 
 		// create query template
 		$query = "UPDATE author SET authorEmail = :authorEmail, authorUsername = :authorUsername, 
@@ -320,124 +335,85 @@ VALUES(:authorId, :authorAvatarUrl, :authorActivationToken, :authorEmail, :autho
 		$statement->execute($parameters);
 	}
 
-/**
- * gets the author by authorId
- *
- * @param \PDO $pdo PDO connection object
- * @param Uuid|string $authorId author id to search for
- * @return Author|null Tweet found or null if not found
- * @throws \PDOException when mySQL related errors occur
- * @throws \TypeError when a variable are not the correct data type
- **/
-public static function getAuthorByAuthorId(\PDO $pdo, $authorId) : ?Author {
-	// sanitize the authorId before searching
-	try {
-		$authorId = self::validateUuid($authorId);
-	} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
-		throw(new \PDOException($exception->getMessage(), 0, $exception));
-	}
-
-	// create query template
-	$query = "SELECT authorId, authorAvatarUrl, authorActivationToken, authorEmail, authorHash, authorUsername FROM author WHERE authorId = :authorId";
-	$statement = $pdo->prepare($query);
-
-	// bind the tweet id to the place holder in the template
-	$parameters = ["authorId" => $authorId->getBytes()];
-	$statement->execute($parameters);
-
-	// grab the tweet from mySQL
-	try {
-		$authorId = null;
-		$statement->setFetchMode(\PDO::FETCH_ASSOC);
-		$row = $statement->fetch();
-		if($row !== false) {
-			$authorId = new Author($row["authorId"], $row["authorAvatarUrl"], $row["authorActivationToken"], $row["authorEmail"], $row[authorHash], $row[authorUsername]);
-		}
-	} catch(\Exception $exception) {
-		// if the row couldn't be converted, rethrow it
-		throw(new \PDOException($exception->getMessage(), 0, $exception));
-	}
-	return($authorId);
-}
-
-/**
- * gets the Author by profile id
- *
- * @param \PDO $pdo PDO connection object
- * @param Uuid|string $authorProfileId profile id to search by
- * @return \SplFixedArray SplFixedArray of authors found
- * @throws \PDOException when mySQL related errors occur
- * @throws \TypeError when variables are not the correct data type
- **/
-	public static function getAuthorByAuthorUsername(\PDO $pdo, string $authorUsername) : \SplFixedArray {
-		// sanitize the description before searching
-		$authorUsername = trim($authorUsername);
-		$authorUsername = filter_var($authorUsername, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($authorUsername) === true) {
-			throw(new \PDOException("author username is invalid"));
+	/**
+	 * gets the author by authorId
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @param Uuid|string $authorId author id to search for
+	 * @return Author|null Tweet found or null if not found
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when a variable are not the correct data type
+	 **/
+	public static function getAuthorByAuthorId(\PDO $pdo, $authorId): ?Author {
+		// sanitize the authorId before searching
+		try {
+			$authorId = self::validateUuid($authorId);
+		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
 		}
 
-// create query template
-		$query = "SELECT authorId, authorAvatarUrl, authorActivationToken, authorEmail, authorHash, authorUsername FROM author WHERE authorUsername = :authorUsername";
+		// create query template
+		$query = "SELECT authorId, authorAvatarUrl, authorActivationToken, authorEmail, authorHash, authorUsername FROM author WHERE authorId = :authorId";
 		$statement = $pdo->prepare($query);
-		// bind the tweet profile id to the place holder in the template
-		$parameters = ["authorUsername" => $authorUsername->getBytes()];
+
+		// bind the tweet id to the place holder in the template
+		$parameters = ["authorId" => $authorId->getBytes()];
 		$statement->execute($parameters);
-		// build an array of tweets
-		$authorUsername = new \SplFixedArray($statement->rowCount());
-		$statement->setFetchMode(\PDO::FETCH_ASSOC);
-		while(($row = $statement->fetch()) !== false) {
-			try {
-				$authorUsername = new Author($row["authorId"], $row["authorAvatarUrl"], $row["authorActivationToken"], $row["authorEmail"], $row["authorHash"], row[$authorUsername]);
-				$authorUsername[$authorUsername->key()] = $authorUsername;
-				$authorUsername->next();
-			} catch(\Exception $exception) {
-				// if the row couldn't be converted, rethrow it
-				throw(new \PDOException($exception->getMessage(), 0, $exception));
+
+		// grab the tweet from mySQL
+		try {
+			$authorId = null;
+			$statement->setFetchMode(\PDO::FETCH_ASSOC);
+			$row = $statement->fetch();
+			if($row !== false) {
+				$authorId = new Author($row["authorId"], $row["authorAvatarUrl"], $row["authorActivationToken"], $row["authorEmail"], $row[authorHash], $row[authorUsername]);
 			}
+		} catch(\Exception $exception) {
+			// if the row couldn't be converted, rethrow it
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
 		}
+		return ($authorId);
 	}
 
 	/**
-	 * gets the author by authorUsername
+	 * gets the Author by profile id
 	 *
 	 * @param \PDO $pdo PDO connection object
-	 * @param string $authorUsername author content to search for
+	 * @param Uuid|string $authorProfileId profile id to search by
 	 * @return \SplFixedArray SplFixedArray of authors found
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throws \TypeError when variables are not the correct data type
 	 **/
-	public static function getauthorbyauthorUsername(\PDO $pdo, string $authorUsername) : \SplFixedArray {
+	public static function getAuthorByAuthorUsername(\PDO $pdo, string $authors): \SplFixedArray {
 		// sanitize the description before searching
-		$authorUsername = trim($authorUsername);
-		$authorUsername = filter_var($authorUsername, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($authorUsername) === true) {
+		$authors = trim($authors);
+		$authors = filter_var($authors, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($authors) === true) {
 			throw(new \PDOException("author username is invalid"));
 		}
-		// escape any mySQL wild cards
-		$authorUsername = str_replace("_", "\\_", str_replace("%", "\\%", $authorUsername));
 
-		// create query template
-		$query = "SELECT authorId, authorAvatarUrl, authorActivationToken, authorEmail, authorHash, authorUsername FROM author WHERE authorUsername = :authorUsername";
+// create query template
+		$query = "SELECT authorId, authorAvatarUrl, authorActivationToken, authorEmail, authorHash, authorUsername FROM author WHERE authorUsername LIKE :authorUsername";
 		$statement = $pdo->prepare($query);
-
-		// bind the tweet content to the place holder in the template
-		$authorUsername = "%$authorUsername%";
+		// bind the author profile id to the place holder in the template
+		$authorUsername="%authorUsername%";
 		$parameters = ["authorUsername" => $authorUsername];
 		$statement->execute($parameters);
-
-		// build an array of tweets
+		// build an array of authors
 		$authors = new \SplFixedArray($statement->rowCount());
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
 			try {
-				$authorUsername = new Tweet($row["authorId"], $row["authorAvatarUrl"], $row["authorActivationToken"], $row["authorEmail"], row["authorHash"], row["authorUsername"]);
-				$authors[$authors->key()] = $authorUsername;
+				$author = new Author($row["authorId"], $row["authorAvatarUrl"], $row["authorActivationToken"], $row["authorEmail"], $row["authorHash"], $row[$authorUsername]);
+				$authors[$authors->key()] = $author;
 				$authors->next();
 			} catch(\Exception $exception) {
 				// if the row couldn't be converted, rethrow it
 				throw(new \PDOException($exception->getMessage(), 0, $exception));
 			}
 		}
-		return($authors);
+		return ($authors);
 	}
+}
+
+
