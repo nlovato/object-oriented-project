@@ -423,5 +423,21 @@ public static function getAuthorByAuthorId(\PDO $pdo, $authorId) : ?Author {
 
 		// bind the tweet content to the place holder in the template
 		$authorUsername = "%$authorUsername%";
-		$parameters = ["tweetContent" => $authorUsername];
+		$parameters = ["authorUsername" => $authorUsername];
 		$statement->execute($parameters);
+
+		// build an array of tweets
+		$authors = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$authorUsername = new Tweet($row["authorId"], $row["authorAvatarUrl"], $row["authorActivationToken"], $row["authorEmail"], row["authorHash"], row["authorUsername"]);
+				$authors[$authors->key()] = $authorUsername;
+				$authors->next();
+			} catch(\Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($authors);
+	}
