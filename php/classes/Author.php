@@ -359,3 +359,23 @@ public static function getAuthorByAuthorId(\PDO $pdo, $authorId) : ?Author {
 	}
 	return($authorId);
 }
+
+/**
+ * gets the Author by profile id
+ *
+ * @param \PDO $pdo PDO connection object
+ * @param Uuid|string $authorProfileId profile id to search by
+ * @return \SplFixedArray SplFixedArray of authors found
+ * @throws \PDOException when mySQL related errors occur
+ * @throws \TypeError when variables are not the correct data type
+ **/
+	public static function getAuthorByAuthorUsername(\PDO $pdo, string $authorUsername) : \SplFixedArray {
+		// sanitize the description before searching
+		$authorUsername = trim($authorUsername);
+		$authorUsername = filter_var($authorUsername, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($authorUsername) === true) {
+			throw(new \PDOException("author username is invalid"));
+		}
+
+		// escape any mySQL wild cards
+		$authorUsername = str_replace("_", "\\_", str_replace("%", "\\%", $authorUsername));
