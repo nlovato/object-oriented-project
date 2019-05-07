@@ -320,8 +320,6 @@ VALUES(:authorId, :authorAvatarUrl, :authorActivationToken, :authorEmail, :autho
 		$statement->execute($parameters);
 	}
 
-}
-
 /**
  * gets the author by authorId
  *
@@ -338,3 +336,26 @@ public static function getAuthorByAuthorId(\PDO $pdo, $authorId) : ?Author {
 	} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
 		throw(new \PDOException($exception->getMessage(), 0, $exception));
 	}
+
+	// create query template
+	$query = "SELECT authorId, authorAvatarUrl, authorActivationToken, authorEmail, authorHash, authorUsername FROM author WHERE authorId = :authorId";
+	$statement = $pdo->prepare($query);
+
+	// bind the tweet id to the place holder in the template
+	$parameters = ["authorId" => $authorId->getBytes()];
+	$statement->execute($parameters);
+
+	// grab the tweet from mySQL
+	try {
+		$authorId = null;
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		$row = $statement->fetch();
+		if($row !== false) {
+			$authorId = new Author($row["authorId"], $row["authorAvatarUrl"], $row["authorActivationToken"], $row["authorEmail"], $row[authorHash], $row[authorUsername]);
+		}
+	} catch(\Exception $exception) {
+		// if the row couldn't be converted, rethrow it
+		throw(new \PDOException($exception->getMessage(), 0, $exception));
+	}
+	return($authorId);
+}
