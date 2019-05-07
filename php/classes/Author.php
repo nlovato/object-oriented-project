@@ -70,20 +70,20 @@ class Author {
 			$this->setAuthorEmail($newAuthorEmail);
 			$this->setAuthorHash($newAuthorHash);
 			$this->setAuthorUsername($newAuthorUsername);
-		}
-			//determine what exception type was thrown
+		} //determine what exception type was thrown
 		catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
 			$exceptionType = get_class($exception);
 			throw(new $exceptionType($exception->getMessage(), 0, $exception));
 		}
 	}
-	/**
-	 *Accessor method for authorId
-	 * @return string|Uuid for authorId (or null if new Profile)
-	 */
-	public function getAuthorId():Uuid {
-		return($this->authorId);
-	}
+		/**
+		 *Accessor method for authorId
+		 * @return string|Uuid for authorId (or null if new Profile)
+		 */
+		public
+		function getAuthorAvatarURL(): ?string {
+			return ($this->authorAvatarUrl);
+		}
 	/**
 	 * mutator method for author id
 	 *
